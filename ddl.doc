@@ -1,0 +1,16 @@
+Summary of DDL Commands
+CREATE: Used to create new tables, indexes, views, etc.
+CREATE TABLE
+CREATE INDEX
+CREATE VIEW
+ALTER: Used to modify existing tables, including adding, modifying, and dropping columns.
+ALTER TABLE ADD
+ALTER TABLE MODIFY
+ALTER TABLE DROP
+ALTER TABLE RENAME
+DROP: Used to delete existing tables, indexes, views, etc.
+DROP TABLE
+DROP INDEX
+DROP VIEW
+TRUNCATE: Used to remove all rows from a table without deleting the table structure.
+TRUNCATE TABLE
