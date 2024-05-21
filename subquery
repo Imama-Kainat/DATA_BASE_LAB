@@ -1,0 +1,219 @@
+ Here is a comprehensive overview of subqueries, including various types, their usage, syntax, and examples.
+
+### Types of Subqueries
+
+1. **Single-row subquery**
+2. **Multiple-row subquery**
+3. **Multiple-column subquery**
+4. **Correlated subquery**
+5. **Subqueries in SELECT clause**
+6. **Subqueries in FROM clause**
+7. **Subqueries in WHERE clause**
+8. **Subqueries in HAVING clause**
+
+### 1. Single-row Subquery
+
+A single-row subquery returns only one row.
+
+#### Syntax:
+```sql
+SELECT column1, column2
+FROM main_table
+WHERE column = (SELECT sub_column FROM sub_table WHERE condition);
+```
+
+#### Example:
+```sql
+SELECT first_name, last_name
+FROM employees
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Sales');
+```
+
+### 2. Multiple-row Subquery
+
+A multiple-row subquery returns more than one row. Typically used with `IN`, `ANY`, or `ALL` operators.
+
+#### Syntax:
+```sql
+SELECT column1, column2
+FROM main_table
+WHERE column IN (SELECT sub_column FROM sub_table WHERE condition);
+```
+
+#### Example:
+```sql
+SELECT first_name, last_name
+FROM employees
+WHERE department_id IN (SELECT department_id FROM departments WHERE location_id = 1700);
+```
+
+### 3. Multiple-column Subquery
+
+A multiple-column subquery returns more than one column.
+
+#### Syntax:
+```sql
+SELECT column1, column2
+FROM main_table
+WHERE (column1, column2) IN (SELECT sub_column1, sub_column2 FROM sub_table WHERE condition);
+```
+
+#### Example:
+```sql
+SELECT employee_id, first_name
+FROM employees
+WHERE (department_id, job_id) IN (SELECT department_id, job_id FROM job_history WHERE end_date IS NULL);
+```
+
+### 4. Correlated Subquery
+
+A correlated subquery refers to a column from the outer query. It is evaluated once for each row processed by the outer query.
+
+#### Syntax:
+```sql
+SELECT column1, column2
+FROM main_table AS alias
+WHERE column = (SELECT sub_column FROM sub_table WHERE condition AND alias.column = sub_table.column);
+```
+
+#### Example:
+```sql
+SELECT e.first_name, e.last_name
+FROM employees e
+WHERE e.salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id);
+```
+
+### 5. Subqueries in the SELECT Clause
+
+Subqueries can be used in the `SELECT` clause to return a value that will be displayed as a column.
+
+#### Syntax:
+```sql
+SELECT column1, (SELECT sub_column FROM sub_table WHERE condition) AS alias
+FROM main_table;
+```
+
+#### Example:
+```sql
+SELECT first_name, last_name, (SELECT department_name FROM departments WHERE departments.department_id = employees.department_id) AS department_name
+FROM employees;
+```
+
+### 6. Subqueries in the FROM Clause
+
+Subqueries in the `FROM` clause are used to define a derived table that can be used in the outer query.
+
+#### Syntax:
+```sql
+SELECT main_table.column1, subquery_table.sub_column
+FROM main_table
+JOIN (SELECT sub_column FROM sub_table WHERE condition) AS subquery_table
+ON main_table.column = subquery_table.column;
+```
+
+#### Example:
+```sql
+SELECT e.first_name, e.last_name, dept_count.total
+FROM employees e
+JOIN (SELECT department_id, COUNT(*) AS total FROM employees GROUP BY department_id) dept_count
+ON e.department_id = dept_count.department_id;
+```
+
+### 7. Subqueries in the WHERE Clause
+
+Subqueries in the `WHERE` clause filter the rows of the outer query based on the result of the subquery.
+
+#### Syntax:
+```sql
+SELECT column1, column2
+FROM main_table
+WHERE column = (SELECT sub_column FROM sub_table WHERE condition);
+```
+
+#### Example:
+```sql
+SELECT first_name, last_name
+FROM employees
+WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Sales');
+```
+
+### 8. Subqueries in the HAVING Clause
+
+Subqueries in the `HAVING` clause filter groups of rows defined by the `GROUP BY` clause.
+
+#### Syntax:
+```sql
+SELECT column1, COUNT(*)
+FROM main_table
+GROUP BY column1
+HAVING COUNT(*) > (SELECT AVG(sub_column) FROM sub_table WHERE condition);
+```
+
+#### Example:
+```sql
+SELECT department_id, COUNT(*)
+FROM employees
+GROUP BY department_id
+HAVING COUNT(*) > (SELECT AVG(count) FROM (SELECT COUNT(*) AS count FROM employees GROUP BY department_id) subquery);
+```
+
+### Detailed Explanation of Subqueries
+
+1. **Single-row Subquery**: Returns a single row and a single column. If the subquery returns more than one row, an error occurs.
+    ```sql
+    SELECT first_name, last_name
+    FROM employees
+    WHERE salary = (SELECT MAX(salary) FROM employees);
+    ```
+
+2. **Multiple-row Subquery**: Returns multiple rows and a single column. Used with `IN`, `ANY`, `ALL`.
+    ```sql
+    SELECT first_name, last_name
+    FROM employees
+    WHERE department_id IN (SELECT department_id FROM departments WHERE location_id = 1700);
+    ```
+
+3. **Multiple-column Subquery**: Returns multiple rows and multiple columns.
+    ```sql
+    SELECT employee_id, first_name
+    FROM employees
+    WHERE (department_id, job_id) IN (SELECT department_id, job_id FROM job_history WHERE end_date IS NULL);
+    ```
+
+4. **Correlated Subquery**: Refers to columns in the outer query. It runs once for each row of the outer query.
+    ```sql
+    SELECT e.first_name, e.last_name
+    FROM employees e
+    WHERE e.salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id);
+    ```
+
+5. **Subquery in the SELECT Clause**: Subqueries used to return values in the `SELECT` clause.
+    ```sql
+    SELECT first_name, last_name, (SELECT department_name FROM departments WHERE departments.department_id = employees.department_id) AS department_name
+    FROM employees;
+    ```
+
+6. **Subquery in the FROM Clause**: Subqueries used to create derived tables in the `FROM` clause.
+    ```sql
+    SELECT e.first_name, e.last_name, dept_count.total
+    FROM employees e
+    JOIN (SELECT department_id, COUNT(*) AS total FROM employees GROUP BY department_id) dept_count
+    ON e.department_id = dept_count.department_id;
+    ```
+
+7. **Subquery in the WHERE Clause**: Subqueries used to filter rows in the `WHERE` clause.
+    ```sql
+    SELECT first_name, last_name
+    FROM employees
+    WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Sales');
+    ```
+
+8. **Subquery in the HAVING Clause**: Subqueries used to filter groups in the `HAVING` clause.
+    ```sql
+    SELECT department_id, COUNT(*)
+    FROM employees
+    GROUP BY department_id
+    HAVING COUNT(*) > (SELECT AVG(count) FROM (SELECT COUNT(*) AS count FROM employees GROUP BY department_id) subquery);
+    ```
+
+Subqueries are a powerful feature in SQL, enabling complex queries and data retrieval that would be difficult to achieve with simple joins or filtering alone. They allow for greater flexibility and can be nested to multiple levels, although for readability and performance, it's often advisable to keep the nesting to a manageable level.
