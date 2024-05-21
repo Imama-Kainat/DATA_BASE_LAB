@@ -14,3 +14,34 @@ DROP INDEX
 DROP VIEW
 TRUNCATE: Used to remove all rows from a table without deleting the table structure.
 TRUNCATE TABLE
+
+CREATE TABLE parent_table (
+    parent_id1 INT,
+    parent_id2 INT,
+    parent_name VARCHAR(50),
+    PRIMARY KEY (parent_id1, parent_id2)
+);
+
+CREATE TABLE child_table (
+    child_id INT PRIMARY KEY,
+    child_name VARCHAR(50),
+    parent_id1 INT,
+    parent_id2 INT,
+    FOREIGN KEY (parent_id1, parent_id2) REFERENCES parent_table(parent_id1, parent_id2)
+);
+
+ALTER TABLE employees
+RENAME TO staff;
+
+ALTER TABLE table_name
+DROP COLUMN column_name;
+
+ALTER TABLE employees
+MODIFY phone_number VARCHAR(15) NOT NULL;
+
+ALTER TABLE employees
+ADD phone_number VARCHAR(20);
+
+CREATE INDEX idx_employee_last_name
+ON employees (last_name);
+
