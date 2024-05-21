@@ -1,0 +1,144 @@
+Certainly! Here is a detailed overview of all types of joins in SQL along with their syntax and examples.
+
+### Types of Joins
+
+1. **INNER JOIN**
+2. **LEFT JOIN (LEFT OUTER JOIN)**
+3. **RIGHT JOIN (RIGHT OUTER JOIN)**
+4. **FULL OUTER JOIN**
+5. **CROSS JOIN**
+6. **SELF JOIN**
+
+### 1. INNER JOIN
+`INNER JOIN` returns records that have matching values in both tables.
+
+#### Syntax:
+```sql
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
+```
+
+#### Example:
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+FROM employees
+INNER JOIN departments ON employees.department_id = departments.department_id;
+```
+
+### 2. LEFT JOIN (LEFT OUTER JOIN)
+`LEFT JOIN` returns all records from the left table (table1), and the matched records from the right table (table2). The result is `NULL` from the right side if there is no match.
+
+#### Syntax:
+```sql
+SELECT columns
+FROM table1
+LEFT JOIN table2
+ON table1.column = table2.column;
+```
+
+#### Example:
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+FROM employees
+LEFT JOIN departments ON employees.department_id = departments.department_id;
+```
+
+### 3. RIGHT JOIN (RIGHT OUTER JOIN)
+`RIGHT JOIN` returns all records from the right table (table2), and the matched records from the left table (table1). The result is `NULL` from the left side if there is no match.
+
+#### Syntax:
+```sql
+SELECT columns
+FROM table1
+RIGHT JOIN table2
+ON table1.column = table2.column;
+```
+
+#### Example:
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+FROM employees
+RIGHT JOIN departments ON employees.department_id = departments.department_id;
+```
+
+### 4. FULL OUTER JOIN
+`FULL OUTER JOIN` returns all records when there is a match in either left (table1) or right (table2) table. The result is `NULL` from the side where there is no match.
+
+#### Syntax:
+```sql
+SELECT columns
+FROM table1
+FULL OUTER JOIN table2
+ON table1.column = table2.column;
+```
+
+#### Example:
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+FROM employees
+FULL OUTER JOIN departments ON employees.department_id = departments.department_id;
+```
+
+### 5. CROSS JOIN
+`CROSS JOIN` returns the Cartesian product of the two tables, i.e., it returns all possible combinations of rows from the two tables.
+
+#### Syntax:
+```sql
+SELECT columns
+FROM table1
+CROSS JOIN table2;
+```
+
+#### Example:
+```sql
+SELECT employees.first_name, departments.department_name
+FROM employees
+CROSS JOIN departments;
+```
+
+### 6. SELF JOIN
+`SELF JOIN` is a join in which a table is joined with itself.
+
+#### Syntax:
+```sql
+SELECT A.columns, B.columns
+FROM table_name A, table_name B
+WHERE condition;
+```
+
+#### Example:
+```sql
+SELECT e1.first_name AS Employee, e2.first_name AS Manager
+FROM employees e1
+INNER JOIN employees e2 ON e1.manager_id = e2.employee_id;
+```
+
+### Summary of Join Types and Their Use Cases
+
+1. **INNER JOIN**: 
+   - Retrieves only the rows that have matching values in both tables.
+   - Useful for finding matching records between two tables.
+
+2. **LEFT JOIN (LEFT OUTER JOIN)**: 
+   - Retrieves all rows from the left table, and the matched rows from the right table. If no match, NULL values are returned for columns from the right table.
+   - Useful for finding all records from one table and matching records from another.
+
+3. **RIGHT JOIN (RIGHT OUTER JOIN)**: 
+   - Retrieves all rows from the right table, and the matched rows from the left table. If no match, NULL values are returned for columns from the left table.
+   - Useful for finding all records from one table and matching records from another, just from the opposite direction as LEFT JOIN.
+
+4. **FULL OUTER JOIN**: 
+   - Retrieves all rows when there is a match in either left or right table. If no match, NULL values are returned for columns from the non-matching table.
+   - Useful for finding all records and their relationships (or lack thereof) between two tables.
+
+5. **CROSS JOIN**: 
+   - Retrieves the Cartesian product of the two tables. All possible combinations of rows from both tables.
+   - Useful for scenarios where you need all combinations of records between two tables.
+
+6. **SELF JOIN**: 
+   - A table joined with itself. Usually involves using table aliases to distinguish the table instances.
+   - Useful for hierarchical data and finding relationships within the same table.
+
+These joins are fundamental to SQL and are essential for querying relational databases effectively. They allow you to combine data from multiple tables in various ways to get the desired results.
